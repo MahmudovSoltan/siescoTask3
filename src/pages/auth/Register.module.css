@@ -1,6 +1,12 @@
-.container {
-  max-width: 400px;
-  margin: 100px auto;
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.register_container {
+  min-width: 400px;
   padding: 30px;
   background-color: #f0f4f8;
   border-radius: 10px;

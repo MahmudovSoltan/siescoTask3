@@ -19,3 +19,17 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
 }
+.auth_titile{
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+.form_bottom{
+  font-size: 16px;
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+.form_bottom span{
+  text-decoration: underline;
+  color: #db2455;
+  cursor: pointer;
+}

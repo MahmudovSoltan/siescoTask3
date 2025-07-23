@@ -3,7 +3,7 @@ import styles from './Login.module.css';
 import type { IRegister } from '../../types/auth.type';
 import { loginFunc } from '../../services/authApi';
 import { useNavigate } from 'react-router-dom';
-const initialData :Pick<IRegister, 'password' | 'email'> = {
+const initialData: Pick<IRegister, 'password' | 'email'> = {
   email: "",
   password: "",
 
@@ -11,26 +11,26 @@ const initialData :Pick<IRegister, 'password' | 'email'> = {
 const Login = () => {
   const [form, setForm] = useState(initialData);
   const navigate = useNavigate()
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit =  async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await loginFunc(form)
     console.log(response);
     const accessToken = response.accessToken
     const refreshToken = response.refreshToken
-    localStorage.setItem("accessToken",accessToken)
-    localStorage.setItem("refresh",refreshToken) 
+    localStorage.setItem("accessToken", accessToken)
+    localStorage.setItem("refresh", refreshToken)
     if (refreshToken && accessToken) {
       navigate("/user_table")
-    }   
+    }
   };
 
   return (
     <div className={styles.container}>
-      <h2>Login</h2>
+      <h2 className='auth_titile'>Login</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="email"
@@ -48,6 +48,9 @@ const Login = () => {
           onChange={handleChange}
           className={styles.input}
         />
+        <div className='form_bottom'>
+          Don’t have an account? <span onClick={()=>navigate("/")}>Sign up</span>
+        </div>
         <button type="submit" className={styles.button}>Login</button>
       </form>
     </div>
