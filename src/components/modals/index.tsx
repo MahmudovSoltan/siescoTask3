@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './modal.module.css';
-import type { Field } from '../../App';
+import type { Field } from '../../pages/userTable';
 
 
 interface ModalProps {
@@ -18,6 +18,9 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   onExport,
 }) => {
+
+
+  
   return (
 
     <div className={styles.modalContainer}>
