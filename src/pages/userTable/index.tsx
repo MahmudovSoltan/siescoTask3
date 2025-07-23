@@ -65,7 +65,7 @@ const UserTable = () => {
     if (fields.length > 0) {
 
       setLoading(true)
-      await exportExcel(fields)
+         await exportExcel(fields);
       await new Promise(res => setTimeout(res, 2000));
       const response = await axiosInstance.get(`/api/users/me/files`);
 
@@ -131,7 +131,7 @@ const UserTable = () => {
   ];
 
   if (loading) {
-    return <div className="loading_container"><ScaleLoader style={{ zIndex: "10" }} color="green" /></div>;
+    return <div className="loading_container"><ScaleLoader style={{zIndex:"10"}} color="green" /></div>;
   }
   return (
     <div>

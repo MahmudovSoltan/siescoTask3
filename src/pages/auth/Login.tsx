@@ -11,11 +11,11 @@ const initialData :Pick<IRegister, 'password' | 'email'> = {
 const Login = () => {
   const [form, setForm] = useState(initialData);
   const navigate = useNavigate()
-  const handleChange = (e) => {
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit =  async (e) => {
+  const handleSubmit =  async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await loginFunc(form)
     console.log(response);

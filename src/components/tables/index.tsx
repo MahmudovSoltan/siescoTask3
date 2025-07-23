@@ -3,7 +3,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
-type GenericObject = Record<string, any>;
+type GenericObject = Record<string, string>;
 
 interface TableProps {
   tableData: GenericObject[];
@@ -13,7 +13,7 @@ interface TableProps {
 const Table = ({ tableData, columns }: TableProps) => {
 
   const table = useMaterialReactTable({
-    columns,
+    columns:columns ?? [],
     data: tableData,
     enablePagination: false,
     enableBottomToolbar: false,

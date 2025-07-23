@@ -16,11 +16,11 @@ const initialData:IRegister = {
 const Register = () => {
   const [form, setForm] = useState(initialData);
   const navigate = useNavigate()
-  const handleChange = (e) => {
+  const handleChange = (e :React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit =async (e) => {
+  const handleSubmit =async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await registerFunc(form)
 
