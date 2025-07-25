@@ -22,5 +22,16 @@ export const API_ENDPOINTS = {
     LOGIN:{
       POST:()=>"/api/Auth/Login"
     }
+  },
+  IMPORT :{
+    UPLOAD:{
+      POST:()=>"/api/Import/Role/Upload"
+    },
+    VALIDATE:{
+      POST:()=>"/api/Import/Role/Validate"
+    },
+    TODO:{
+      PSOT:()=>"/api/Import/Role/ToDb"
+    }
   }
 };

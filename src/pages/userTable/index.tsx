@@ -7,12 +7,13 @@ import Modal from "../../components/modals";
 import { v4 as uuidv4 } from 'uuid'
 import axiosInstance from "../../helpers/instance";
 import { ScaleLoader } from 'react-spinners'
+import ExcelModal from "../../components/excelModal/Index";
 
 export interface Field {
   [key: string]: string | any;
 }
 const UserTable = () => {
-
+  const [excelModal, setExcelModal] = useState(false)
   const [fields, setFields] = useState<Field[]>([
     {
       frontendId: uuidv4(),
@@ -63,16 +64,25 @@ const UserTable = () => {
 
   const handleExport = async () => {
     if (fields.length > 0) {
+      console.log(fields);
+      const selectedFields = fields
+        .filter(f => f.isInclude)
+        .map(({ dbColumnName, excelColumnName, isInclude }) => ({
+          dbColumnName,
+          excelColumnName,
+          isInclude
+        }));
+      console.log(selectedFields, 'selectedFields');
 
       setLoading(true)
-         await exportExcel(fields);
+      await exportExcel(selectedFields);
       await new Promise(res => setTimeout(res, 2000));
       const response = await axiosInstance.get(`/api/users/me/files`);
 
       const files = response.data;
       const lastFile = files[files.length - 1]; // array-in sonuncu elementi
       if (lastFile?.fileByte) {
-        const byteCharacters = atob(lastFile.fileByte); // Base64 decode
+        const byteCharacters = atob(lastFile.fileByte);
         const byteNumbers = new Array(byteCharacters.length).fill(null).map((_, i) =>
           byteCharacters.charCodeAt(i)
         );
@@ -131,12 +141,15 @@ const UserTable = () => {
   ];
 
   if (loading) {
-    return <div className="loading_container"><ScaleLoader style={{zIndex:"10"}} color="green" /></div>;
+    return <div className="loading_container"><ScaleLoader style={{ zIndex: "10" }} color="green" /></div>;
   }
+
+  console.log(tableData);
+
   return (
     <div>
       <div className="container">
-        <Header setShowModal={setShowModal} />
+        <Header setShowModal={setShowModal} openModal={() => setExcelModal(true)} />
         <Table tableData={tableData} columns={columns} />
         {showModal && (
           <Modal
@@ -147,6 +160,10 @@ const UserTable = () => {
             onExport={handleExport}
           />
         )}
+        {
+          excelModal && <ExcelModal onClose={() => setExcelModal(false)} />
+        }
+
       </div>
     </div>
   )

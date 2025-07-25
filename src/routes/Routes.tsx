@@ -4,14 +4,16 @@ import Login from "../pages/auth/Login"
 import UserTable from "../pages/userTable"
 
 
+
 const MainRoutes = () => {
   return (
-   <BrowserRouter>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Register />}/>
-          <Route path="/login" element={<Login />} />
-          <Route path="/user_table" element={<UserTable />} />
-          {/* <Route path="*" element={<NoPage />} /> */}
+        <Route path="/" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/user_table" element={<UserTable />} />
+        {/* <Route path="*" element={<NoPage />} /> */}
+      
       </Routes>
     </BrowserRouter>
   )

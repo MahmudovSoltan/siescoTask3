@@ -1,7 +1,11 @@
 
+import axios from "axios";
 import axiosInstance from "../helpers/instance";
 import type { Field } from "../pages/userTable";
 import { API_ENDPOINTS } from "./EndpointResources.g";
+
+
+
 
 export const getTableName = async () => {
     try {
@@ -33,7 +37,7 @@ export const getTableData = async (tableName: string) => {
     }
 };
 
-export const exportExcel = async ( data:Field) => {
+export const exportExcel = async (data: Field) => {
     try {
         const response = await axiosInstance({
             method: 'POST',
@@ -56,3 +60,33 @@ export const downloadFile = async (fileName: string) => {
         throw error;
     }
 };
+
+export const iportExcelUpload = async (data:any) => {
+    console.log(data, "data");
+
+    try {
+        const response = await axios.post("https://localhost:7046/api/Import/Role/Upload", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data
+
+    } catch (error) {
+        console.log(error);
+        throw new Error
+
+    }
+}
+
+export const excelValidate = async (data: any) => {
+    try {
+        const response = await axiosInstance.post(API_ENDPOINTS.IMPORT.VALIDATE.POST(), data)
+        console.log(response.data);
+
+        return response.data
+    } catch (error) {
+        console.log(error);
+
+    }
+}
