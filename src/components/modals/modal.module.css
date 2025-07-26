@@ -37,6 +37,7 @@
   display: flex;
   flex-direction: column;
   z-index: 99999;
+  position: relative;
 }
 
 /* Header */
@@ -55,6 +56,9 @@
 
 /* Close düyməsi */
 .closeBtn {
+  position: absolute;
+  right: 0;
+  top: -24px;
   background: none;
   border: none;
   font-size: 24px;
@@ -62,6 +66,7 @@
   cursor: pointer;
   color: #555;
   transition: color 0.2s ease;
+  width: max-content;
 }
 
 .closeBtn:hover {

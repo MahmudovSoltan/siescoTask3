@@ -20,12 +20,12 @@ interface RowType {
 
 interface IDataType {
   errors: { [key: string]: string },
-  rowData:{ [key: string]: string }
+  rowData: { [key: string]: string }
 
 }
 interface IErrorType {
   data: IDataType[],
-  errors?:string
+  errors?: string
 }
 const ExcelModal = ({ onClose }: ExcelModalProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,11 +45,7 @@ const ExcelModal = ({ onClose }: ExcelModalProps) => {
       const formData = new FormData();
       formData.append("file", file);
       try {
-        console.log(formData, "formdata");
-
         const response = await iportExcelUpload(formData)
-
-
         setExcelResponse(response)
         setDbColumunName(response?.dbColumnNames)
         setExcelColomunName(response?.excelColumnNames)
@@ -96,8 +92,6 @@ const ExcelModal = ({ onClose }: ExcelModalProps) => {
     }
 
   }, [dbColumnName, excelColumnName]);
-
-
   useEffect(() => {
     const hasEmpty = excelColumnName.some(col => columnMapping[col] == " ")
     setEptyRow(hasEmpty);
@@ -112,78 +106,94 @@ const ExcelModal = ({ onClose }: ExcelModalProps) => {
         <div className={styles.close_icon}>
           <IoIosCloseCircleOutline onClick={onClose} size={24} />
         </div>
-        <div className={styles.excel_input_div}>
-          <h3>Excel Fayl Yüklə</h3>
-          <div><FaDownload size={24} onClick={handleImportClick} />
-          </div>
+        <div>
+          {
+            !excerResponse ? <p className={styles.modal_title}>
+              Məlumatları daxil edin
+            </p> : <div className={styles.modal_div}>
+              <p>Sənəd xlsx</p>
+              <div onClick={handleImportClick} >Yeni Fayl Yüklə</div>
+            </div>
+
+          }
 
         </div>
+
         <input type="file" ref={fileInputRef} onChange={handleChooseFile} style={{ display: "none" }} accept=".xlsx, .xls" />
         {
-          excerResponse && <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  {excelColumnName?.map((item, i) => (
-                    <th key={i}>
-                      <div>
+          !excerResponse ? <div className={styles.excel_input_div}>
+            <h3>Excel Fayl Yüklə</h3>
+            <div><FaDownload size={24} onClick={handleImportClick} />
+            </div>
+          </div> : <>
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    {excelColumnName?.map((item, i) => (
+                      <th key={i}>
                         <div>
-                          {item}
+                          <div>
+                            {item}
+                          </div>
+                          <select
+                            value={columnMapping[item]}
+                            onChange={(e) => {
+                              const selectedDbColumn = e.target.value;
+                              setColumnMapping((prev) => ({
+                                ...prev,
+                                [item]: selectedDbColumn,
+                              }));
+                            }}
+                          >
+                            <option value={" "}>Secin</option>
+                            {dbColumnName?.map((dbItem, j) => {
+                              const isSelectedInOther = Object.entries(columnMapping).some(
+                                ([key, val]) => key !== item && val === dbItem
+                              );
+                              return (
+                                <option key={j} value={dbItem} disabled={isSelectedInOther}>
+                                  {dbItem}
+                                </option>
+                              );
+                            })}
+                          </select>
                         </div>
-                        <select
-                          value={columnMapping[item]}
-                          onChange={(e) => {
-                            const selectedDbColumn = e.target.value;
-                            setColumnMapping((prev) => ({
-                              ...prev,
-                              [item]: selectedDbColumn,
-                            }));
-                          }}
-                        >
-                          <option value={" "}>Secin</option>
-                          {dbColumnName?.map((dbItem, j) => {
-                            const isSelectedInOther = Object.entries(columnMapping).some(
-                              ([key, val]) => key !== item && val === dbItem
-                            );
-                            return (
-                              <option key={j} value={dbItem} disabled={isSelectedInOther}>
-                                {dbItem}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {tableData?.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {excelColumnName.map((colName, colIndex) => (
-                      <td key={colIndex}>
-                        <input
-                          type="text"
-                          value={row[colName] ?? ""}
-                          className={errorData[rowIndex]?.errors?.[colName] ? styles.errorInput : ""}
-                          onChange={(e) => {
-                            const newValue = e.target.value;
-                            setTableData(prevData => {
-                              const newData = [...prevData];
-                              const updatedRow = { ...newData[rowIndex], [colName]: newValue };
-                              newData[rowIndex] = updatedRow;
-                              return newData;
-                            });
-                          }}
-                        />
-                      </td>
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <button disabled={eptyRow} style={{ backgroundColor: eptyRow ? "gray" : "" }} onClick={handleSubmit}>Save</button>
-          </div>
+                </thead>
+                <tbody>
+                  {tableData?.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {excelColumnName.map((colName, colIndex) => (
+                        <td key={colIndex}>
+                          <input
+                            type="text"
+                            value={row[colName] ?? ""}
+                            className={errorData[rowIndex]?.errors?.[colName] ? styles.errorInput : ""}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              setTableData(prevData => {
+                                const newData = [...prevData];
+                                const updatedRow = { ...newData[rowIndex], [colName]: newValue };
+                                newData[rowIndex] = updatedRow;
+                                return newData;
+                              });
+                            }}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:"20px",justifyContent:"flex-end"}}>
+              <button style={{ backgroundColor: "transparent", color: "black", border: "1px solid #015bb5" }} onClick={handleSubmit}>Ləğv et </button>
+              <button disabled={eptyRow} style={{ backgroundColor: eptyRow ? "gray" : "" }} onClick={handleSubmit}>Yoxla</button>
+            </div>
+          </>
         }
 
       </div>

@@ -59,9 +59,6 @@ const UserTable = () => {
 
 
 
-
-
-  // ✅ Excel export istəyi göndərilir
   const handleExport = async () => {
     if (fields.length > 0) {
       const selectedFields = fields
@@ -70,14 +67,10 @@ const UserTable = () => {
           dbColumnName,
           excelColumnName,
         }));
-
       setLoading(true);
-
       try {
-        await exportExcel(selectedFields); // server faylı hazırlayır
-        console.log("Export request göndərildi");
+        await exportExcel(selectedFields);
         setLoading(false);
-        // Fayl hazır olduqda "FileReady" ilə gəldikdə yüklənəcək
       } catch (error) {
         console.error("Export zamanı xəta:", error);
         setLoading(false);
@@ -90,11 +83,7 @@ const UserTable = () => {
   useEffect(() => {
     const startSignalR = async () => {
       try {
-         const response = await connection.start();
-        console.log("SignalR bağlantısı başladı.");
-           console.log(response,"response");
-           
-        // ✅ "FileReady" event-i gələndə faylı yüklə
+        await connection.start();
         connection.on("FileReady", (fileName: string) => {
           console.log("File hazırdır:", fileName);
           const a = document.createElement('a');
@@ -113,8 +102,6 @@ const UserTable = () => {
     };
 
     startSignalR();
-
-    // 🧹 Cleanup - komponent unmount olanda bağlantını dayandır
     return () => {
       connection.stop();
     };
