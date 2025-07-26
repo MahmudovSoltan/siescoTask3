@@ -29,21 +29,7 @@ axiosInstance.interceptors.response.use(
         const originalRequest = error.config;
         const refresh = localStorage.getItem("refresh");
         if (error.response?.status === 401 && !originalRequest._retry && refresh) {
-            originalRequest._retry = true;
-            try {
-                const res = await axiosInstance.post("/api/Auth/Refresh", {
-                    refreshToken: refresh,
-                });
-                const { accessToken, refreshToken } = res.data;
-                localStorage.setItem("accessToken", accessToken);
-                localStorage.setItem("refresh", refreshToken);
-                originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-                return axiosInstance(originalRequest);
-            } catch (err) {
-                localStorage.removeItem("accessToken");
-                localStorage.removeItem("refresh_token");
-                return Promise.reject(err);
-            }
+            location.href = "/login"
         }
 
         return Promise.reject(error);

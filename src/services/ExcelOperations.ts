@@ -44,6 +44,8 @@ export const exportExcel = async (data: Field) => {
             url: API_ENDPOINTS.EXPORT.POST(),
             data // Ensure the response is treated as a blob
         });
+        console.log(response);
+        
         return response.data;
     } catch (error) {
         console.error(`Error exporting data for table:`, error);

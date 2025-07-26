@@ -7,6 +7,7 @@ import UserTable from "../pages/userTable"
 
 const MainRoutes = () => {
   return (
+    
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Register />} />
